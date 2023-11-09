@@ -14,15 +14,18 @@ return new class extends Migration
     public function up()
     {
         Schema::create('transactions', function (Blueprint $table) {
-            $table->id();
+            $table->id(); // Auto-incrementing bigint
             $table->unsignedBigInteger('user_id');
-            $table->enum('transaction_type', ['credit', 'debit']);
+            $table->enum('transaction_type', ['deposit', 'withdrawal']); // Enum for transaction type
             $table->double('amount');
-            $table->decimal('fee', 8, 2);
+            $table->decimal('fee', 8, 2)->default(0); // Decimal for fee with 8 digits in total, 2 after the decimal point
             $table->date('date');
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
+
+            // Foreign key constraint
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
+
     }
 
     /**
